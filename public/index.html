@@ -12,5 +12,44 @@
       rel="stylesheet"
     />
   </head>
-  <body></body>
+  <body>
+    <!-- NavBar -->
+    <header>
+      <div class="navbar container">
+        <!--Logo -->
+        <a href="" class="logo">Ecommerce</a>
+        <!--Cart-->
+        <i class="bx bx-shopping-bag" id="cart-icon" items="0"></i>
+        <div class="cart">
+          <h2 class="cart-header">Your Cart</h2>
+          <div class="cart-content">
+            <div class="cart-box">
+              <img
+                src="./img/t-shirts/grey-t-shirt.jpg"
+                alt=""
+                class="cart-img"
+              />
+              <div class="card-detail-box">
+                <div class="card-product-title">Product T-Shirt</div>
+                <div class="card-price">199kr</div>
+                <input type="number" name="" id="" value="1" class="items" />
+              </div>
+              <!--Remove Items from Cart-->
+              <i class="bx bx-trash"></i>
+            </div>
+          </div>
+          <div class="total">
+            <div class="total-header">Total</div>
+            <div class="total-price">0 kr</div>
+          </div>
+          <!--Purchase Button-->
+          <button type="button" class="btn-purchase">Pay Now</button>
+          <!--Close Cart-->
+          <i class="bx bx-x" id="close-cart"></i>
+        </div>
+      </div>
+    </header>
+    <!--JS Link-->
+    <script src="./js/main.js"></script>
+  </body>
 </html>
