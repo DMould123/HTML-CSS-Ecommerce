@@ -302,3 +302,44 @@ header {
   font-size: 15px;
   font-weight: 500;
 }
+
+@media screen and (max-width: 1080px) {
+  .navbar {
+    padding: 14px 0;
+  }
+  .section {
+    padding: 30px 0 20px;
+  }
+
+  .container {
+    margin: 0 auto;
+    width: 90%;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .navbar {
+    padding: 12px 0;
+  }
+  .logo {
+    font-size: 10px;
+  }
+  .cart {
+    width: 100%;
+  }
+}
+
+@media screen and (max-width: 360px) {
+  .navbar {
+    padding: 12px 0;
+  }
+  .logo {
+    font-size: 10px;
+  }
+  .store {
+    margin-top: 10px !important;
+  }
+  .cart {
+    width: 100%;
+  }
+}
