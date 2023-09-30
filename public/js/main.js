@@ -1,4 +1,3 @@
-// Open & Close Cart
 let cart = document.querySelector('.cart')
 let cartIcon = document.querySelector('#cart-icon')
 let closeCart = document.querySelector('#close-cart')
@@ -19,7 +18,7 @@ if (document.readyState == 'loading') {
   ready()
 }
 
-//Ready Function
+// Ready Function
 function ready() {
   // Remove Items from Cart
   var removeCart = document.getElementsByClassName('cart-remove')
@@ -27,7 +26,7 @@ function ready() {
     var button = removeCart[i]
     button.addEventListener('click', removeCartItem)
   }
-  //Item Update
+  // Item Update
   var itemsUpdate = document.getElementsByClassName('items')
   for (var i = 0; i < itemsUpdate.length; i++) {
     var input = itemsUpdate[i]
@@ -39,6 +38,8 @@ function ready() {
     var button = addCart[i]
     button.addEventListener('click', addCartClicked)
   }
+
+  loadCartFromLocalStorage() // Load cart data from localStorage
 }
 
 // Remove Cart Item
@@ -46,6 +47,7 @@ function removeCartItem(event) {
   var buttonClicked = event.target
   buttonClicked.parentElement.remove()
   updateTotal()
+  saveCartToLocalStorage() // Save cart data after removing an item
 }
 
 // Item Quantity updated
@@ -57,6 +59,7 @@ function itemsChanged(event) {
     input.value = 1
   }
   updateTotal()
+  saveCartToLocalStorage() // Save cart data after updating item quantity
 }
 
 // Add Cart Function
@@ -72,21 +75,13 @@ function addCartClicked(event) {
   updateTotal()
 }
 
-function addProductToCart(title, price, productImage) {
+function addProductToCart(title, price, productImageSrc, productImage) {
   var cartShopBox = document.createElement('div')
   cartShopBox.classList.add('cart-box')
-  var cartItems = document.querySelector('.cart-content') // Change to querySelector
-  var cartItemsTitles = cartItems.getElementsByClassName('card-product-title')
-
-  for (var i = 0; i < cartItemsTitles.length; i++) {
-    if (cartItemsTitles[i].innerText === title) {
-      alert('You previously added this item to the cart!')
-      return
-    }
-  }
+  var cartItems = document.querySelector('.cart-content')
 
   var cartBoxContent = `
-    <img src="${productImage}" alt="" class="cart-img">
+    <img src="${productImageSrc}" alt="" class="cart-img">
     <div class="card-detail-box">
       <div class="card-product-title">${title}</div>
       <div class="card-price">${price}</div>
@@ -101,8 +96,18 @@ function addProductToCart(title, price, productImage) {
 
   cartShopBox
     .querySelector('.cart-remove')
-    .addEventListener('click', removeCartItem) // Corrected querySelector
-  cartShopBox.querySelector('.items').addEventListener('change', itemsChanged) // Corrected querySelector
+    .addEventListener('click', removeCartItem)
+  cartShopBox.querySelector('.items').addEventListener('change', itemsChanged)
+
+  // Store the product image source in the cart item data
+  var cartData = JSON.parse(localStorage.getItem('cartData')) || []
+  cartData.push({
+    title: title,
+    price: price,
+    items: 1,
+    productImage: productImageSrc // Store the product image source
+  })
+  localStorage.setItem('cartData', JSON.stringify(cartData))
 }
 
 // Update Total
@@ -126,5 +131,51 @@ function updateTotal() {
   var totalPriceElement = document.querySelector('.total-price')
   if (totalPriceElement) {
     totalPriceElement.innerText = 'kr' + total.toFixed(2) // Format total with two decimal places
+  }
+}
+
+function saveCartToLocalStorage() {
+  var cartBoxes = document.querySelectorAll('.cart-box')
+  var cartData = []
+
+  cartBoxes.forEach(function (cartBox) {
+    var titleElement = cartBox.querySelector('.card-product-title')
+    var priceElement = cartBox.querySelector('.card-price')
+    var itemsElement = cartBox.querySelector('.items')
+
+    if (titleElement && priceElement && itemsElement) {
+      var title = titleElement.innerText
+      var price = priceElement.innerText
+      var items = itemsElement.value
+
+      cartData.push({
+        title: title,
+        price: price,
+        items: items
+      })
+    }
+  })
+
+  localStorage.setItem('cartData', JSON.stringify(cartData))
+}
+
+function loadCartFromLocalStorage() {
+  var cartData = localStorage.getItem('cartData')
+
+  if (cartData) {
+    cartData = JSON.parse(cartData)
+
+    cartData.forEach(function (item) {
+      // Ensure that productImageSrc is set to an empty string if not present in the item data
+      var productImageSrc = item.productImage || ''
+
+      addProductToCart(item.title, item.price, productImageSrc) // Pass the product image source
+      var itemsElement = document.querySelector('.cart-box:last-child .items')
+      if (itemsElement) {
+        itemsElement.value = item.items
+      }
+    })
+
+    updateTotal()
   }
 }
