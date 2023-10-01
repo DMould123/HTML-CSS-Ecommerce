@@ -76,38 +76,69 @@ function addCartClicked(event) {
 }
 
 function addProductToCart(title, price, productImageSrc, productImage) {
-  var cartShopBox = document.createElement('div')
-  cartShopBox.classList.add('cart-box')
   var cartItems = document.querySelector('.cart-content')
+  var cartItemsBoxes = cartItems.getElementsByClassName('cart-box')
+  var cartBoxToUpdate = null
 
-  var cartBoxContent = `
-    <img src="${productImageSrc}" alt="" class="cart-img">
-    <div class="card-detail-box">
-      <div class="card-product-title">${title}</div>
-      <div class="card-price">${price}</div>
-      <input type="number" name="" id="" value="1" class="items" />
-    </div>
-    <!-- Remove Items from Cart -->
-    <i class="bx bx-trash cart-remove"></i>
-  `
+  // Check if the item already exists in the cart
+  for (var i = 0; i < cartItemsBoxes.length; i++) {
+    var cartItemTitle = cartItemsBoxes[i].querySelector('.card-product-title')
+    if (cartItemTitle && cartItemTitle.innerText === title) {
+      cartBoxToUpdate = cartItemsBoxes[i]
+      break
+    }
+  }
 
-  cartShopBox.innerHTML = cartBoxContent
-  cartItems.appendChild(cartShopBox)
+  if (cartBoxToUpdate) {
+    // If the item exists in the cart, update the quantity
+    var itemsElement = cartBoxToUpdate.querySelector('.items')
+    if (itemsElement) {
+      var currentQuantity = parseFloat(itemsElement.value)
+      itemsElement.value = currentQuantity + 1
+    }
+  } else {
+    // If the item does not exist in the cart, create a new cart box
+    var cartShopBox = document.createElement('div')
+    cartShopBox.classList.add('cart-box')
 
-  cartShopBox
-    .querySelector('.cart-remove')
-    .addEventListener('click', removeCartItem)
-  cartShopBox.querySelector('.items').addEventListener('change', itemsChanged)
+    var cartBoxContent = `
+      <img src="${productImageSrc}" alt="" class="cart-img">
+      <div class="card-detail-box">
+        <div class="card-product-title">${title}</div>
+        <div class="card-price">${price}</div>
+        <input type="number" name="" id="" value="1" class="items" />
+      </div>
+      <!-- Remove Items from Cart -->
+      <i class="bx bx-trash cart-remove"></i>
+    `
+
+    cartShopBox.innerHTML = cartBoxContent
+    cartItems.appendChild(cartShopBox)
+
+    cartShopBox
+      .querySelector('.cart-remove')
+      .addEventListener('click', removeCartItem)
+    cartShopBox.querySelector('.items').addEventListener('change', itemsChanged)
+  }
 
   // Store the product image source in the cart item data
   var cartData = JSON.parse(localStorage.getItem('cartData')) || []
-  cartData.push({
-    title: title,
-    price: price,
-    items: 1,
-    productImage: productImageSrc // Store the product image source
-  })
+  var existingCartItemIndex = cartData.findIndex((item) => item.title === title)
+  if (existingCartItemIndex !== -1) {
+    // If the item already exists in cartData, update the quantity
+    cartData[existingCartItemIndex].items++
+  } else {
+    // If the item doesn't exist in cartData, add it
+    cartData.push({
+      title: title,
+      price: price,
+      items: 1,
+      productImage: productImageSrc
+    })
+  }
   localStorage.setItem('cartData', JSON.stringify(cartData))
+
+  updateTotal()
 }
 
 // Update Total
