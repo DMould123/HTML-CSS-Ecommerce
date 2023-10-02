@@ -58,29 +58,40 @@ header {
   color: var(--main-color);
   font-weight: 700;
 }
-#cart-icon {
-  font-size: 18px;
+
+/* Cart Icon with Count */
+/* Adjust the cart icon's position */
+#cart-icon[items] {
   position: relative;
+  margin-right: 10px;
+}
+
+/* Adjust the cart icon's size and style */
+#cart-icon {
+  font-size: 22px;
   cursor: pointer;
-  color: var(--text-color); /* Set icon color */
+  color: var(--text-color);
+  position: relative; /* Add this to position the number correctly */
 }
+
+/* Style the cart icon's number */
 #cart-icon[items]::after {
-  contain: '';
-}
-#cart-icon[items]::after {
-  content: '';
+  content: attr(items); /* Display the value of the 'items' attribute */
   position: absolute;
-  top: 0;
-  right: -12px;
+  top: -8px;
+  right: -8px;
   width: 20px;
   height: 20px;
-  background: var(--text-color);
+  background: var(--main-color);
   border-radius: 50%;
   color: white;
   display: flex;
   font-size: 12px;
   justify-content: center;
   align-items: center;
+  font-weight: bold;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  z-index: 1; /* Ensure the number is above the icon */
 }
 
 /* Cart */

@@ -1,6 +1,13 @@
 let cart = document.querySelector('.cart')
 let cartIcon = document.querySelector('#cart-icon')
 let closeCart = document.querySelector('#close-cart')
+let cartCount = 0 // Initialize cart count
+
+// Function to update the cart icon's count
+function updateCartIcon(count) {
+  const cartIcon = document.getElementById('cart-icon')
+  cartIcon.setAttribute('items', count.toString())
+}
 
 // Open Cart
 cartIcon.onclick = () => {
@@ -45,9 +52,15 @@ function ready() {
 // Remove Cart Item
 function removeCartItem(event) {
   var buttonClicked = event.target
+  var itemsElement = buttonClicked.parentElement.querySelector('.items')
+  if (itemsElement) {
+    var removedQuantity = parseFloat(itemsElement.value)
+    cartCount -= removedQuantity
+  }
   buttonClicked.parentElement.remove()
   updateTotal()
   saveCartToLocalStorage() // Save cart data after removing an item
+  updateCartIcon(cartCount) // Update the cart icon count
 }
 
 // Item Quantity updated
@@ -95,6 +108,7 @@ function addProductToCart(title, price, productImageSrc, productImage) {
     if (itemsElement) {
       var currentQuantity = parseFloat(itemsElement.value)
       itemsElement.value = currentQuantity + 1
+      cartCount += 1 // Increase cart count
     }
   } else {
     // If the item does not exist in the cart, create a new cart box
@@ -119,6 +133,7 @@ function addProductToCart(title, price, productImageSrc, productImage) {
       .querySelector('.cart-remove')
       .addEventListener('click', removeCartItem)
     cartShopBox.querySelector('.items').addEventListener('change', itemsChanged)
+    cartCount += 1 // Increase cart count
   }
 
   // Store the product image source in the cart item data
@@ -139,6 +154,7 @@ function addProductToCart(title, price, productImageSrc, productImage) {
   localStorage.setItem('cartData', JSON.stringify(cartData))
 
   updateTotal()
+  updateCartIcon(cartCount) // Update the cart icon count
 }
 
 // Update Total
@@ -207,6 +223,30 @@ function loadCartFromLocalStorage() {
       }
     })
 
+    // Update the cart icon count based on the loaded data
+    cartCount = cartData.reduce((acc, item) => acc + parseInt(item.items), 0)
+    updateCartIcon(cartCount)
+
     updateTotal()
   }
+}
+
+// Example: Add an item to the cart
+function addToCart(item) {
+  // Add the item to the cart logic here
+
+  // Update the cart count
+  cartCount++
+
+  // Update the cart icon with the new count
+  updateCartIcon(cartCount)
+}
+
+// Example: Remove an item from the cart
+function removeFromCart(item) {
+  // Remove the item from the cart logic here
+
+  // Update the total and save cart data
+  updateTotal()
+  saveCartToLocalStorage()
 }
