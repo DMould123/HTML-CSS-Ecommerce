@@ -63,6 +63,51 @@ function removeCartItem(event) {
   updateCartIcon(cartCount) // Update the cart icon count
 }
 
+function updateCartCount() {
+  var cartBoxes = document.querySelectorAll('.cart-box')
+  cartCount = 0
+
+  cartBoxes.forEach(function (cartBox) {
+    var itemsElement = cartBox.querySelector('.items')
+    if (itemsElement) {
+      cartCount += parseFloat(itemsElement.value)
+    }
+  })
+
+  if (cartCount < 0) {
+    cartCount = 0 // Ensure cart count doesn't go below 0
+  }
+
+  updateCartIcon(cartCount)
+}
+function changeCartItemQuantity(cartBox, increase) {
+  var itemsElement = cartBox.querySelector('.items')
+  if (itemsElement) {
+    var currentQuantity = parseFloat(itemsElement.value)
+    if (increase) {
+      itemsElement.value = currentQuantity + 1
+      cartCount += 1 // Increase cart count
+    } else {
+      if (currentQuantity > 1) {
+        itemsElement.value = currentQuantity - 1
+        cartCount -= 1 // Decrease cart count
+      }
+    }
+    updateCartCount()
+  }
+}
+
+// Add event listeners for cart item quantity increase and decrease buttons
+document.addEventListener('click', function (event) {
+  if (event.target.classList.contains('cart-increase')) {
+    var cartBox = event.target.closest('.cart-box')
+    changeCartItemQuantity(cartBox, true)
+  } else if (event.target.classList.contains('cart-decrease')) {
+    var cartBox = event.target.closest('.cart-box')
+    changeCartItemQuantity(cartBox, false)
+  }
+})
+
 // Item Quantity updated
 function itemsChanged(event) {
   var input = event.target
@@ -73,6 +118,9 @@ function itemsChanged(event) {
   }
   updateTotal()
   saveCartToLocalStorage() // Save cart data after updating item quantity
+
+  // Update the cart icon count based on the new quantity
+  updateCartCount()
 }
 
 // Add Cart Function
