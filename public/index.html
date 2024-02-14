@@ -16,13 +16,23 @@
       href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
       rel="stylesheet"
     />
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="./img/t-shirts/tshirts.jpg" />
   </head>
   <body>
     <!-- NavBar -->
     <header>
       <div class="navbar container">
         <!--Logo -->
-        <a href="" class="logo">DM-Pop!</a>
+        <a href="#" class="logo">DM-Pop!</a>
+        <!-- Navigation Links -->
+        <nav>
+          <ul>
+            <li><a href="#t-shirts">T-Shirts</a></li>
+            <li><a href="#jackets">Jackets</a></li>
+            <li><a href="#trainers">Trainers</a></li>
+          </ul>
+        </nav>
         <!--Cart-->
         <i class="bx bx-shopping-bag" id="cart-icon" items="0"></i>
         <div class="cart">
@@ -43,7 +53,7 @@
       </div>
     </header>
     <!--Products-->
-    <section class="store container">
+    <section id="t-shirts" class="store container">
       <h2 class="section-title">T-Shirts</h2>
       <!--Store Content-->
       <div class="store-content">
@@ -103,7 +113,7 @@
     </section>
 
     <!--Jackets-->
-    <section class="store container">
+    <section id="jackets" class="store container">
       <h2 class="section-title">Jackets</h2>
       <div class="store-content">
         <!--Jacket 1-->
@@ -161,7 +171,7 @@
     </section>
 
     <!-- Trainers -->
-    <section class="store container">
+    <section id="trainers" class="store container">
       <h2 class="section-title">Trainers</h2>
       <div class="store-content">
         <!--Trainer 1-->

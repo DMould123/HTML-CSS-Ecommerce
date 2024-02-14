@@ -53,6 +53,28 @@ header {
   justify-content: space-between;
   padding: 20px 0;
 }
+/* Navigation Links */
+nav ul {
+  display: flex;
+  align-items: center;
+}
+
+nav ul li {
+  margin-right: 20px;
+}
+
+nav ul li a {
+  color: var(--text-color);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+nav ul li a:hover {
+  color: var(--main-color);
+}
+
 .logo {
   font-size: 14px;
   color: var(--main-color);
