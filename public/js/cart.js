@@ -29,3 +29,11 @@ payBtn.addEventListener('click', () => {
       console.error('Error creating checkout session:', error)
     })
 })
+
+// Clear the cart after successful payment
+function clearCart() {
+  var cartContent = document.getElementById('cart-content')
+  cartContent.innerHTML = ''
+  updateTotal()
+  localStorage.removeItem('cartData')
+}
