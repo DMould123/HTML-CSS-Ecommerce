@@ -16,8 +16,6 @@ app.use(express.urlencoded({ extended: true }))
 // Serve static files from the 'public' directory
 app.use(express.static(path.join(__dirname, '..', 'public')))
 
-console.log('STRIPE_SECRET_KEY:', process.env.STRIPE_SECRET_KEY)
-
 // Home Route
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'public', 'index.html'))

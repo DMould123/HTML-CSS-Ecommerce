@@ -30,10 +30,10 @@ payBtn.addEventListener('click', () => {
     })
 })
 
-// Clear the cart after successful payment
-function clearCart() {
-  var cartContent = document.getElementById('cart-content')
-  cartContent.innerHTML = ''
-  updateTotal()
-  localStorage.removeItem('cartData')
-}
+// function clearCart() {
+//   var cartContent = document.getElementById('cart-content')
+//   cartContent.innerHTML = ''
+//   updateTotal()
+//   localStorage.removeItem('cartData') // Remove cartData from localStorage
+//   updateCartIcon(0) // Update the cart icon count to zero
+// }
