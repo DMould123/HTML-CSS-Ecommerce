@@ -1,3 +1,11 @@
+// Function to clear localStorage for testing purposes
+function clearLocalStorage() {
+  localStorage.removeItem('cartData')
+}
+
+// Clear localStorage before loading cart data for testing
+clearLocalStorage()
+
 let cart = document.querySelector('.cart')
 let cartIcon = document.querySelector('#cart-icon')
 let closeCart = document.querySelector('#close-cart')
@@ -19,14 +27,24 @@ closeCart.onclick = () => {
 }
 
 // Add to Cart
-if (document.readyState == 'loading') {
-  document.addEventListener('DOMContentLoaded', ready)
+if (!localStorage.getItem('cartData')) {
+  // Call loadCartFromLocalStorage only if cartData is not already present in localStorage
+  if (document.readyState == 'loading') {
+    document.addEventListener('DOMContentLoaded', function () {
+      loadCartFromLocalStorage() // Call loadCartFromLocalStorage once when the page content is fully loaded
+      ready() // Call the ready function
+    })
+  } else {
+    loadCartFromLocalStorage() // Call loadCartFromLocalStorage once when the page content is fully loaded
+    ready() // Call the ready function
+  }
 } else {
-  ready()
+  ready() // If cartData is already present in localStorage, directly call the ready function
 }
 
 // Ready Function
 function ready() {
+  console.log('Ready function called')
   // Remove Items from Cart
   var removeCart = document.getElementsByClassName('cart-remove')
   for (var i = 0; i < removeCart.length; i++) {
@@ -51,6 +69,7 @@ function ready() {
 
 // Remove Cart Item
 function removeCartItem(event) {
+  console.log('Remove cart item called')
   var buttonClicked = event.target
   var itemsElement = buttonClicked.parentElement.querySelector('.items')
   if (itemsElement) {
@@ -63,7 +82,9 @@ function removeCartItem(event) {
   updateCartIcon(cartCount) // Update the cart icon count
 }
 
+// Function to update cart count
 function updateCartCount() {
+  console.log('Updating cart count')
   var cartBoxes = document.querySelectorAll('.cart-box')
   cartCount = 0
 
@@ -80,6 +101,7 @@ function updateCartCount() {
 
   updateCartIcon(cartCount)
 }
+
 function changeCartItemQuantity(cartBox, increase) {
   var itemsElement = cartBox.querySelector('.items')
   if (itemsElement) {
@@ -136,7 +158,13 @@ function addCartClicked(event) {
   updateTotal()
 }
 
-function addProductToCart(title, price, productImageSrc, productImage) {
+function addProductToCart(
+  title,
+  price,
+  productImageSrc,
+  productImage,
+  cartBox
+) {
   var cartItems = document.querySelector('.cart-content')
   var cartItemsBoxes = cartItems.getElementsByClassName('cart-box')
   var cartBoxToUpdate = null
